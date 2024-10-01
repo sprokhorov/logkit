@@ -14,6 +14,12 @@ type Logger interface {
 	Errorf(format string, args ...interface{})
 	Fatal(args ...interface{})
 	Fatalf(format string, args ...interface{})
+	// Some loggers have a method to flush their buffers.
+	Sync() error
+}
+
+func NewDefaultLogger() Logger {
+	return &DefaultLogger{}
 }
 
 // DefaultLogger implements Logger interface with standard log package.
@@ -67,4 +73,9 @@ func (dl *DefaultLogger) Fatal(args ...interface{}) {
 // Fatalf prints formatted fatal message and exists with code 1.
 func (dl *DefaultLogger) Fatalf(format string, args ...interface{}) {
 	log.Fatalf(format, args...)
+}
+
+// Flush logger's buffers. It's doing nothing for the default logger.
+func (dl *DefaultLogger) Sync() error {
+	return nil
 }
